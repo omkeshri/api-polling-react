@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { addChat } from "../utils/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { generateRandomMessage, generateRandomName } from "../utils/helpers";
+import ChatMessage from "./ChatMessage";
 
 const LiveChat = () => {
   const [inputMessage, setInputMessage] = useState("");
   const dispatch = useDispatch();
-  const message = useSelector((store) => store.live.chat);
+  const message = useSelector((store) => store.chat.chat);
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("api");
@@ -22,7 +24,13 @@ const LiveChat = () => {
 
     return () => clearInterval(interval);
   }, []);
-
+  const handleSend = (e) => {
+    dispatch(addChat({
+        name: "User",
+        message: inputMessage
+    }))
+    setInputMessage("");
+  }
   return (
     <div className="h-[30rem] w-[26rem] m-auto mt-10 border border-gray-400 bg-gradient-to-br from-gray-100 to-gray-300 rounded-lg shadow-lg overflow-y-auto flex flex-col justify-end gap-2 no-scrollbar">
       {message.map((m, index) => (
